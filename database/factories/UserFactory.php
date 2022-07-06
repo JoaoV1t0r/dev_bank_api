@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -10,6 +11,18 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
+    protected $model = \App\Models\User::class;
+
+    /**
+     * Get a new Faker instance.
+     *
+     * @return \Faker\Generator
+     */
+    public function withFaker()
+    {
+        return \Faker\Factory::create('pt_BR');
+    }
+
     /**
      * Define the model's default state.
      *
@@ -17,12 +30,16 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $faker = $this->withFaker();
         return [
-            'name' => fake()->name(),
-            'email' => fake()->safeEmail(),
+            'name' => $faker->name(),
+            'email' => $faker->safeEmail(),
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => Hash::make('123456'),
             'remember_token' => Str::random(10),
+            'cpf' => $faker->cpf(),
+            'rg' => $faker->rg(),
+            'phone' => $faker->phoneNumber(),
         ];
     }
 
