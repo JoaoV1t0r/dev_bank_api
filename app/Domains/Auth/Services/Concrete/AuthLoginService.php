@@ -33,7 +33,6 @@ class AuthLoginService implements IAuthLoginService
         $this->user = User::query()
             ->where('email', $this->request->email)
             ->whereNotNull('email_verified_at')
-            ->where('is_active', true)
             ->first();
     }
 

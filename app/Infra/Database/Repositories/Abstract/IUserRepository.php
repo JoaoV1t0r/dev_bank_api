@@ -6,9 +6,9 @@ use App\Models\User;
 
 interface IUserRepository
 {
-    public function save(User $user): void;
+    public function save(User $user): User;
 
-    public function update(User $user): void;
+    public function update(User $user): User;
 
-    public function delete(User $user): void;
+    public function delete(User $user): User;
 }

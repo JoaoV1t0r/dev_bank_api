@@ -27,6 +27,9 @@ class AuthMyUserService implements IAuthMyUserService
         $this->myUser->setUuid(auth()->user()->uuid);
         $this->myUser->setName(auth()->user()->name);
         $this->myUser->setEmail(auth()->user()->email);
+        $this->myUser->setCpf(auth()->user()->cpf);
+        $this->myUser->setRg(auth()->user()->rg);
+        $this->myUser->setPhone(auth()->user()->phone);
         $this->myUser->setEmailVerifiedAt(auth()->user()->email_verified_at);
         $this->myUser->setCreatedAt(auth()->user()->created_at);
         $this->myUser->setUpdatedAt(auth()->user()->updated_at);

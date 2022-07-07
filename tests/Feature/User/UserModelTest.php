@@ -9,8 +9,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserModelTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @test
      */

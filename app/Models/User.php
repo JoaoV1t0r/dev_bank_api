@@ -3,10 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use YourAppRocks\EloquentUuid\Traits\HasUuid;
@@ -17,6 +17,9 @@ use YourAppRocks\EloquentUuid\Traits\HasUuid;
  * @property string $uuid
  * @property string $name
  * @property string $email
+ * @property string $cpf
+ * @property string $rg
+ * @property string $phone
  * @property string|null $email_verified_at
  * @property string $password
  * @property boolean $is_active
@@ -71,8 +74,13 @@ class User extends Authenticatable implements JWTSubject
         return $this->getKey();
     }
 
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
         return [];
+    }
+
+    public function registrations(): HasMany
+    {
+        return $this->hasMany(RegistrationRequest::class);
     }
 }

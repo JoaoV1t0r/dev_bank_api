@@ -18,17 +18,18 @@ class UserConfirmEmailNotification extends Notification implements ShouldQueue
      */
     public function __construct(
         private string $uuid
-    ) {
+    )
+    {
         //
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
-    public function via($notifiable)
+    public function via(mixed $notifiable): array
     {
         return ['mail'];
     }
@@ -36,24 +37,24 @@ class UserConfirmEmailNotification extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @param mixed $notifiable
+     * @return MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage)
             ->line('Please confirm your email address to continue.')
-            ->action('Confirm Email', route('user.finish_registration', $this->uuid))
+            ->action('Confirm Email', 'devbank.local/confirm-email/' . $this->uuid)
             ->line('Thank you for using our application!');
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray(mixed $notifiable): array
     {
         return [
             //

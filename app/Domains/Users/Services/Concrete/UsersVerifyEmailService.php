@@ -24,7 +24,8 @@ class UsersVerifyEmailService implements IUsersVerifyEmailService
 
     private function setUserVerified(string $userUuid): void
     {
-        $user = User::where('uuid', $userUuid)->firstOrFail();
+        /** @var User $user */
+        $user = User::query()->where('uuid', $userUuid)->firstOrFail()->first();
         $user->email_verified_at = Carbon::now();
         $user->is_active = true;
         $this->userRepository->update($user);

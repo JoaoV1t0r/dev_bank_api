@@ -13,6 +13,8 @@
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.14.1",
         "laravel/tinker": "^2.7",
+        "laravellegends/pt-br-validator": "^9.0",
+        "lucascudo/laravel-pt-br-localization": "^1.2",
         "predis/predis": "^1.1",
         "tymon/jwt-auth": "^1.0",
         "your-app-rocks/eloquent-uuid": "^2.5"
@@ -21,7 +23,6 @@
         "brianium/paratest": "^6.5",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
-        "lucascudo/laravel-pt-br-localization": "^1.2",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^6.1",
         "phpunit/phpunit": "^9.5.10",

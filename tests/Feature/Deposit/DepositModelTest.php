@@ -9,8 +9,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DepositModelTest extends TestCase
 {
-    use RefreshDatabase;
-
     /**
      * @test
      */

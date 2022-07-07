@@ -10,38 +10,31 @@ use App\Models\User;
 
 class UserRepository extends RepositoryBase implements IUserRepository
 {
-
-    /**
-     * @throws HttpInternalErrorException
-     */
-    public function save(User $user): void
+    public function save(User $user): User
     {
         try {
             $user->save();
+            return $user;
         } catch (SystemDefaultException $exception) {
             $this->returnError($exception);
         }
     }
 
-    /**
-     * @throws HttpInternalErrorException
-     */
-    public function update(User $user): void
+    public function update(User $user): User
     {
         try {
             $user->update();
+            return $user;
         } catch (SystemDefaultException $exception) {
             $this->returnError($exception);
         }
     }
 
-    /**
-     * @throws HttpInternalErrorException
-     */
-    public function delete(User $user): void
+    public function delete(User $user): User
     {
         try {
             $user->delete();
+            return $user;
         } catch (SystemDefaultException $exception) {
             $this->returnError($exception);
         }

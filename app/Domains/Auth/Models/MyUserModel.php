@@ -9,9 +9,13 @@ class MyUserModel extends Model
     protected string $uuid;
     protected string $name;
     protected string $email;
-    protected string $email_verified_at;
-    protected string $created_at;
-    protected string $updated_at;
+    protected string $cpf;
+    protected string $rg;
+    protected string $phone;
+    protected string $emailVerifiedAt;
+    protected string $createdAt;
+    protected string $updatedAt;
+
 
     public static function builder(): static
     {
@@ -69,17 +73,65 @@ class MyUserModel extends Model
     /**
      * @return string
      */
-    public function getEmailVerifiedAt(): string
+    public function getCpf(): string
     {
-        return $this->email_verified_at;
+        return $this->cpf;
     }
 
     /**
-     * @param string $email_verified_at
+     * @param string $cpf
      */
-    public function setEmailVerifiedAt(string $email_verified_at): void
+    public function setCpf(string $cpf): void
     {
-        $this->email_verified_at = $email_verified_at;
+        $this->cpf = $cpf;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRg(): string
+    {
+        return $this->rg;
+    }
+
+    /**
+     * @param string $rg
+     */
+    public function setRg(string $rg): void
+    {
+        $this->rg = $rg;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhone(): string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @param string $phone
+     */
+    public function setPhone(string $phone): void
+    {
+        $this->phone = $phone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmailVerifiedAt(): string
+    {
+        return $this->emailVerifiedAt;
+    }
+
+    /**
+     * @param string $emailVerifiedAt
+     */
+    public function setEmailVerifiedAt(string $emailVerifiedAt): void
+    {
+        $this->emailVerifiedAt = $emailVerifiedAt;
     }
 
     /**
@@ -87,15 +139,15 @@ class MyUserModel extends Model
      */
     public function getCreatedAt(): string
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
-     * @param string $created_at
+     * @param string $createdAt
      */
-    public function setCreatedAt(string $created_at): void
+    public function setCreatedAt(string $createdAt): void
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
     }
 
     /**
@@ -103,16 +155,14 @@ class MyUserModel extends Model
      */
     public function getUpdatedAt(): string
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
     /**
-     * @param string $updated_at
+     * @param string $updatedAt
      */
-    public function setUpdatedAt(string $updated_at): void
+    public function setUpdatedAt(string $updatedAt): void
     {
-        $this->updated_at = $updated_at;
+        $this->updatedAt = $updatedAt;
     }
-
-
 }

@@ -2,27 +2,38 @@
 
 namespace App\Domains\Users\Services\Concrete;
 
-use App\Models\User;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Hash;
-use App\Http\Requests\User\UserStoreRequest;
-use App\Notifications\User\UserConfirmEmailNotification;
-use App\Notifications\User\UserConfirmAddressNotification;
 use App\Domains\Users\Services\Abstract\IUsersStoreService;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Infra\Database\Repositories\Abstract\IRegistrationRequestRepository;
 use App\Infra\Database\Repositories\Abstract\IUserRepository;
+use App\Models\RegistrationRequest;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class UsersStoreService implements IUsersStoreService
 {
     private IUserRepository $userRepository;
     private UserStoreRequest $request;
+    private RegistrationRequest $registrationRequest;
+    private IRegistrationRequestRepository $registrationRequestRepository;
     private User $newUser;
 
     /**
+     * @param IRegistrationRequestRepository $registrationRequestRepository
+     * @param RegistrationRequest $registrationRequest
      * @param IUserRepository $userRepository
      * @param User $newUser
      */
-    public function __construct(IUserRepository $userRepository, User $newUser)
+    public function __construct(
+        IRegistrationRequestRepository $registrationRequestRepository,
+        RegistrationRequest            $registrationRequest,
+        IUserRepository                $userRepository,
+        User                           $newUser,
+    )
     {
+        $this->registrationRequestRepository = $registrationRequestRepository;
+        $this->registrationRequest = $registrationRequest;
         $this->userRepository = $userRepository;
         $this->newUser = $newUser;
     }
@@ -32,8 +43,8 @@ class UsersStoreService implements IUsersStoreService
     {
         $this->setRequest($request);
         $this->mapNewUser();
+        $this->mapRegistrationRequest();
         $this->saveNewUser();
-        $this->sendNotificationConfirmAddress();
         return $this->newUser;
     }
 
@@ -47,16 +58,24 @@ class UsersStoreService implements IUsersStoreService
         $this->newUser->name = $this->request->name;
         $this->newUser->email = $this->request->email;
         $this->newUser->password = Hash::make($this->request->password);
+        $this->newUser->cpf = $this->request->cpf;
+        $this->newUser->rg = $this->request->rg;
+        $this->newUser->phone = $this->request->phone;
         $this->newUser->remember_token = Str::random(10);
+    }
+
+    private function mapRegistrationRequest(): void
+    {
+        $this->registrationRequest->user_id = $this->newUser->id;
+        $this->registrationRequest->rg_photo = $this->request->rgPhoto;
+        $this->registrationRequest->cpf_photo = $this->request->cpfPhoto;
+        $this->registrationRequest->confirm_address_photo = $this->request->confirmAddressPhoto;
     }
 
     private function saveNewUser()
     {
-        $this->userRepository->save($this->newUser);
-    }
-
-    private function sendNotificationConfirmAddress()
-    {
-        $this->newUser->notify(new UserConfirmEmailNotification($this->newUser));
+        $this->newUser = $this->userRepository->save($this->newUser);
+        $this->registrationRequest->user_id = $this->newUser->id;
+        $this->registrationRequestRepository->save($this->registrationRequest);
     }
 }
