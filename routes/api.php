@@ -14,6 +14,7 @@ Route::middleware(['jwt'])->group(function () {
 
     Route::prefix('account')->group(function () {
         Route::post('/', [AccountController::class, 'postStoreAccount']);
+        Route::put('/password', [AccountController::class, 'putPasswordAccount']);
     });
 
     Route::prefix('users')->group(function () {

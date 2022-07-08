@@ -5,11 +5,12 @@ namespace App\Http\Requests\Account;
 use App\Http\Requests\Request;
 
 /**
- * Class AccountStoreRequest
+ * Class AccountUpdatePasswordRequest
  * @package App\Http\Requests\Account
  * @property string $password
+ * @property string $oldPassword
  */
-class AccountStoreRequest extends Request
+class AccountUpdatePasswordRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +30,8 @@ class AccountStoreRequest extends Request
     public function rules(): array
     {
         return [
-            'password' => 'required|integer|digits:4',
+            'password' => 'required|confirmed|digits:4',
+            'oldPassword' => 'required',
         ];
     }
 }
