@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\Enums\UserRoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -23,6 +25,7 @@ use YourAppRocks\EloquentUuid\Traits\HasUuid;
  * @property string|null $email_verified_at
  * @property string $password
  * @property boolean $is_active
+ * @property UserRoleEnum $role
  * @property string|null $remember_token
  * @property string|null $created_at
  * @property string|null $updated_at
@@ -44,8 +47,14 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'cpf',
         'rg',
+        'role',
         'password',
         'email_verified_at',
+    ];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'role' => UserRoleEnum::class,
     ];
 
     /**
@@ -58,15 +67,6 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at',
         'password',
         'remember_token',
-    ];
-
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
     ];
 
     public function getJWTIdentifier()
@@ -82,5 +82,10 @@ class User extends Authenticatable implements JWTSubject
     public function registrations(): HasMany
     {
         return $this->hasMany(RegistrationRequest::class);
+    }
+
+    public function account(): HasOne
+    {
+        return $this->hasOne(Account::class);
     }
 }

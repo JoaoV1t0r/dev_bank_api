@@ -44,7 +44,7 @@ class UserConfirmEmailNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage)
             ->line('Please confirm your email address to continue.')
-            ->action('Confirm Email', 'devbank.local/confirm-email/' . $this->uuid)
+            ->action('Confirm Email', route('user.finish_registration', ['userUuid' => $this->uuid]))
             ->line('Thank you for using our application!');
     }
 

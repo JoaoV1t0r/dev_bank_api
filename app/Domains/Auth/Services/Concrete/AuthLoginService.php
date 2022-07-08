@@ -5,6 +5,7 @@ namespace App\Domains\Auth\Services\Concrete;
 use App\Domains\Auth\Services\Abstract\IAuthLoginService;
 use App\Exceptions\HttpBadRequest;
 use App\Http\Requests\Auth\AuthLoginRequest;
+use App\Models\Account;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +13,7 @@ class AuthLoginService implements IAuthLoginService
 {
     private string $token;
     private AuthLoginRequest $request;
-    private null|Model $user;
+    private User|null|Model $user;
 
 
     /**
@@ -31,6 +32,7 @@ class AuthLoginService implements IAuthLoginService
     private function setUser(): void
     {
         $this->user = User::query()
+            ->with('account')
             ->where('email', $this->request->email)
             ->whereNotNull('email_verified_at')
             ->first();
@@ -64,9 +66,11 @@ class AuthLoginService implements IAuthLoginService
     private function getDataLogin(): array
     {
         return [
-            'access_token' => $this->token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'accessToken' => $this->token,
+            'tokenType' => 'bearer',
+            'expiresIn' => auth()->factory()->getTTL() * 60,
+            'user' => $this->user,
+            'account' => $this->user->account ?? false
         ];
     }
 }

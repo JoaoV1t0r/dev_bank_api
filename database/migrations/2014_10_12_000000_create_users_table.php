@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('cpf');
             $table->string('rg');
+            $table->enum('role', ['admin', 'common'])->default('common');
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

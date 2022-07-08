@@ -2,7 +2,6 @@
 
 namespace App\Infra\Database\Repositories\Concrete;
 
-use App\Exceptions\HttpInternalErrorException;
 use App\Exceptions\SystemDefaultException;
 use App\Infra\Database\Repositories\Abstract\IUserRepository;
 use App\Infra\Database\Repositories\RepositoryBase;
@@ -23,7 +22,9 @@ class UserRepository extends RepositoryBase implements IUserRepository
     public function update(User $user): User
     {
         try {
-            $user->update();
+            $user->save();
+            $user->refresh();
+            $this->db->commit();
             return $user;
         } catch (SystemDefaultException $exception) {
             $this->returnError($exception);

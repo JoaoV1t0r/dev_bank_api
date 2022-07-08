@@ -3,8 +3,7 @@
 namespace App\Http\Requests\User;
 
 use App\Http\Requests\Request;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\UploadedFile;
 
 /**
  * Class UserStoreRequest
@@ -15,9 +14,9 @@ use Illuminate\Http\Exceptions\HttpResponseException;
  * @property string phone
  * @property string cpf
  * @property string rg
- * @property string rgPhoto
- * @property string cpfPhoto
- * @property string confirmAddressPhoto
+ * @property UploadedFile rgPhoto
+ * @property UploadedFile cpfPhoto
+ * @property UploadedFile confirmAddressPhoto
  */
 class UserStoreRequest extends Request
 {

@@ -2,33 +2,26 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
+use App\Support\Enums\UserRoleEnum;
+use Faker\Generator;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory
  */
 class UserFactory extends Factory
 {
-    protected $model = \App\Models\User::class;
-
-    /**
-     * Get a new Faker instance.
-     *
-     * @return \Faker\Generator
-     */
-    public function withFaker()
-    {
-        return \Faker\Factory::create('pt_BR');
-    }
+    protected $model = User::class;
 
     /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         $faker = $this->withFaker();
         return [
@@ -40,7 +33,18 @@ class UserFactory extends Factory
             'cpf' => $faker->cpf(),
             'rg' => $faker->rg(),
             'phone' => $faker->phoneNumber(),
+            'role' => UserRoleEnum::COMMON,
         ];
+    }
+
+    /**
+     * Get a new Faker instance.
+     *
+     * @return Generator
+     */
+    public function withFaker(): Generator
+    {
+        return \Faker\Factory::create('pt_BR');
     }
 
     /**
@@ -48,7 +52,7 @@ class UserFactory extends Factory
      *
      * @return static
      */
-    public function unverified()
+    public function unverified(): static
     {
         return $this->state(function (array $attributes) {
             return [
