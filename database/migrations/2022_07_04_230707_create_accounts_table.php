@@ -19,7 +19,7 @@ return new class extends Migration
             $table->uuid('uuid')->unique();
             $table->foreignIdFor(User::class)->constrained();
             $table->bigInteger('number');
-            $table->integer('password');
+            $table->string('password');
             $table->decimal('balance', 18, 2);
             $table->timestamps();
             $table->softDeletes();

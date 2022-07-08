@@ -5,7 +5,6 @@ namespace App\Domains\Auth\Services\Concrete;
 use App\Domains\Auth\Services\Abstract\IAuthLoginService;
 use App\Exceptions\HttpBadRequest;
 use App\Http\Requests\Auth\AuthLoginRequest;
-use App\Models\Account;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
