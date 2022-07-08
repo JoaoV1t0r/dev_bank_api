@@ -21,8 +21,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('phone');
-            $table->string('cpf');
-            $table->string('rg');
+            $table->string('cpf')->unique();
+            $table->string('rg')->unique();
             $table->enum('role', ['admin', 'common'])->default('common');
             $table->rememberToken();
             $table->timestamps();
