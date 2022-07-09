@@ -4,6 +4,13 @@ namespace App\Http\Requests\Transfer;
 
 use App\Http\Requests\Request;
 
+/**
+ * Class TransferRequest.
+ * Paclass App\Http\Requests\Transfer\TransferRequest
+ * @property string userCpf
+ * @property float amount
+ * @property string accountPassword
+ */
 class TransferRequest extends Request
 {
     /**
@@ -26,7 +33,7 @@ class TransferRequest extends Request
         return [
             'amount' => 'required|numeric|min:1',
             'accountPassword' => 'required|integer|digits:4',
-            'userCpf' => 'required|integer|digits:11',
+            'userCpf' => 'required|exists:users,cpf|cpf',
         ];
     }
 }

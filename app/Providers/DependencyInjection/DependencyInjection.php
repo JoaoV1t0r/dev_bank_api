@@ -23,6 +23,7 @@ abstract class DependencyInjection
             new AuthDi($app),
             new RegistrationRequestDi($app),
             new AccountDi($app),
+            new TransferDi($app),
         ]);
     }
 

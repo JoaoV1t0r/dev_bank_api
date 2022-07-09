@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->foreignIdFor(User::class)->constrained();
-            $table->bigInteger('number');
+            $table->bigInteger('number')->unique();
             $table->string('password');
             $table->decimal('balance', 18, 2);
             $table->timestamps();

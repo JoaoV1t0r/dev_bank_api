@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RegistrationRequestController;
+use App\Http\Controllers\Api\TransferController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,6 +16,10 @@ Route::middleware(['jwt'])->group(function () {
     Route::prefix('account')->group(function () {
         Route::post('/', [AccountController::class, 'postStoreAccount']);
         Route::put('/password', [AccountController::class, 'putPasswordAccount']);
+    });
+
+    Route::prefix('transfer')->group(function () {
+        Route::post('/', [TransferController::class, 'postTransfer']);
     });
 
     Route::prefix('users')->group(function () {
