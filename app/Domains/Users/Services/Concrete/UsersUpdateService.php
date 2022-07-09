@@ -3,11 +3,9 @@
 namespace App\Domains\Users\Services\Concrete;
 
 use App\Domains\Users\Services\Abstract\IUsersUpdateService;
-use App\Exceptions\HttpInternalErrorException;
-use App\Http\Requests\Users\UserUpdateRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 use App\Infra\Database\Repositories\Abstract\IUserRepository;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 class UsersUpdateService implements IUsersUpdateService
 {
@@ -23,10 +21,6 @@ class UsersUpdateService implements IUsersUpdateService
         $this->userRepository = $userRepository;
     }
 
-
-    /**
-     * @throws HttpInternalErrorException
-     */
     public function userUpdate(UserUpdateRequest $request): User
     {
         $this->setRequest($request);
@@ -48,13 +42,11 @@ class UsersUpdateService implements IUsersUpdateService
 
     private function mapUserUpdate(): void
     {
-        $this->userUpdate->name = $this->request->name ?? $this->userUpdate->name;
-        $this->userUpdate->password = Hash::make($this->request->password) ?? $this->userUpdate->password;
+        $this->userUpdate->phone = $this->request->phone ?? $this->userUpdate->phone;
+        $this->userUpdate->password = $this->request->password ?? $this->userUpdate->password;
     }
 
-    /**
-     * @throws HttpInternalErrorException
-     */
+
     private function updateUser(): void
     {
         $this->userRepository->update($this->userUpdate);

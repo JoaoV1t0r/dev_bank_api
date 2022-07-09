@@ -9,25 +9,26 @@ use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
- * @property int $account_id
- * @property float $amount
- * @property string $valid_until
- * @property Account $account
+ * @property int $user_id
+ * @property string $email
+ * @property string $token
  * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
  */
-class Deposit extends Model
+class PasswordReset extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'account_id',
-        'amount',
-        'valid_until',
+        'user_id',
+        'email',
+        'token',
+        'created_at',
     ];
 
-    public function account(): BelongsTo
+    public $timestamps = false;
+
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(Account::class);
+        return $this->belongsTo(User::class);
     }
 }

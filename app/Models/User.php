@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Support\Enums\UserRoleEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use YourAppRocks\EloquentUuid\Traits\HasUuid;
@@ -30,6 +32,7 @@ use YourAppRocks\EloquentUuid\Traits\HasUuid;
  * @property string|null $created_at
  * @property string|null $updated_at
  * @property string|null $deleted_at
+ * @property-read PasswordReset $passwordReset
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -79,6 +82,14 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    public function password(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => $value,
+            set: fn($value) => Hash::make($value),
+        );
+    }
+
     public function registrations(): HasMany
     {
         return $this->hasMany(RegistrationRequest::class);
@@ -87,5 +98,10 @@ class User extends Authenticatable implements JWTSubject
     public function account(): HasOne
     {
         return $this->hasOne(Account::class);
+    }
+
+    public function passwordReset(): HasOne
+    {
+        return $this->hasOne(PasswordReset::class);
     }
 }

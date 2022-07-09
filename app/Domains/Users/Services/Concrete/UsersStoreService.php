@@ -8,7 +8,6 @@ use App\Infra\Database\Repositories\Abstract\IRegistrationRequestRepository;
 use App\Infra\Database\Repositories\Abstract\IUserRepository;
 use App\Models\RegistrationRequest;
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class UsersStoreService implements IUsersStoreService
@@ -57,7 +56,7 @@ class UsersStoreService implements IUsersStoreService
     {
         $this->newUser->name = $this->request->name;
         $this->newUser->email = $this->request->email;
-        $this->newUser->password = Hash::make($this->request->password);
+        $this->newUser->password = $this->request->password;
         $this->newUser->cpf = $this->request->cpf;
         $this->newUser->rg = $this->request->rg;
         $this->newUser->phone = $this->request->phone;

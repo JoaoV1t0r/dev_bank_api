@@ -2,64 +2,52 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Support\Models\BaseResponse;
-use App\Exceptions\SystemDefaultException;
-use App\Http\Requests\User\UserStoreRequest;
-use App\Http\Requests\Users\UserDeleteRequest;
-use App\Http\Requests\Users\UserUpdateRequest;
-use Symfony\Component\HttpFoundation\Response;
-use App\Http\Requests\Users\UserListingRequest;
+use App\Domains\Users\Services\Abstract\IUserPasswordResetRequestService;
+use App\Domains\Users\Services\Abstract\IUserPasswordResetService;
 use App\Domains\Users\Services\Abstract\IUsersStoreService;
-use App\Domains\Users\Services\Abstract\IUsersDeleteService;
 use App\Domains\Users\Services\Abstract\IUsersUpdateService;
-use App\Domains\Users\Services\Abstract\IUsersListingService;
 use App\Domains\Users\Services\Abstract\IUsersVerifyEmailService;
+use App\Exceptions\SystemDefaultException;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UserResetPasswordRequest;
+use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
+use App\Support\Models\BaseResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
 {
-    private IUsersListingService $usersListingService;
     private IUsersStoreService $usersStoreService;
     private IUsersUpdateService $usersUpdateService;
-    private IUsersDeleteService $usersDeleteService;
     private IUsersVerifyEmailService $usersVerifyEmailService;
+    private IUserPasswordResetService $usersResetPasswordService;
+    private IUserPasswordResetRequestService $usersResetPasswordRequestService;
+
 
     /**
-     * @param IUsersListingService $usersListingService
      * @param IUsersStoreService $usersStoreService
      * @param IUsersUpdateService $usersUpdateService
-     * @param IUsersDeleteService $usersDeleteService
      * @param IUsersVerifyEmailService $usersVerifyEmailService
+     * @param IUserPasswordResetService $usersResetPasswordService
+     * @param IUserPasswordResetRequestService $usersResetPasswordRequestService
      */
     public function __construct(
-        IUsersListingService $usersListingService,
-        IUsersStoreService   $usersStoreService,
-        IUsersUpdateService  $usersUpdateService,
-        IUsersDeleteService  $usersDeleteService,
-        IUsersVerifyEmailService $usersVerifyEmailService,
-    ) {
-        $this->usersListingService = $usersListingService;
+        IUsersStoreService               $usersStoreService,
+        IUsersUpdateService              $usersUpdateService,
+        IUsersVerifyEmailService         $usersVerifyEmailService,
+        IUserPasswordResetService        $usersResetPasswordService,
+        IUserPasswordResetRequestService $usersResetPasswordRequestService
+    )
+    {
         $this->usersStoreService = $usersStoreService;
         $this->usersUpdateService = $usersUpdateService;
-        $this->usersDeleteService = $usersDeleteService;
         $this->usersVerifyEmailService = $usersVerifyEmailService;
+        $this->usersResetPasswordService = $usersResetPasswordService;
+        $this->usersResetPasswordRequestService = $usersResetPasswordRequestService;
     }
 
-
-    public function index(UserListingRequest $request): Response
-    {
-        try {
-            $userListing = $request->hasPagination()
-                ? $this->usersListingService->getUsersPaginated($request)
-                : $this->usersListingService->getUsersListing();
-            return BaseResponse::builder()
-                ->setMessage('Successfully listing user!')
-                ->setData($userListing)
-                ->response();
-        } catch (SystemDefaultException $exception) {
-            return $exception->response();
-        }
-    }
 
     public function store(UserStoreRequest $request): Response
     {
@@ -87,20 +75,6 @@ class UserController extends Controller
         }
     }
 
-    public function delete(UserDeleteRequest $request): Response
-    {
-        try {
-            $this->usersDeleteService->userDelete($request);
-            return BaseResponse::builder()
-                ->setMessage('Successfully delete user!')
-                ->setData(true)
-                ->setStatusCode(202)
-                ->response();
-        } catch (SystemDefaultException $exception) {
-            return $exception->response();
-        }
-    }
-
     public function verifyEmail(string $userUuid): Response
     {
         try {
@@ -114,4 +88,45 @@ class UserController extends Controller
             return $exception->response();
         }
     }
+
+    public function resetPasswordRequest(Request $request): Response
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'required|email',
+            ]);
+
+            if ($validator->fails()) {
+                return BaseResponse::builder()
+                    ->setMessage('Validation error!')
+                    ->setData($validator->errors())
+                    ->setStatusCode(202)
+                    ->response();
+            }
+            $this->usersResetPasswordRequestService->requestResetPassword($request->email);
+            return BaseResponse::builder()
+                ->setMessage('Successfully request reset password!')
+                ->setData(true)
+                ->setStatusCode(202)
+                ->response();
+        } catch (SystemDefaultException $exception) {
+            return $exception->response();
+        }
+    }
+
+    public function resetPassword(UserResetPasswordRequest $request): Response
+    {
+        try {
+            $this->usersResetPasswordService->resetPassword($request);
+            return BaseResponse::builder()
+                ->setMessage('Successfully reset password!')
+                ->setData(true)
+                ->setStatusCode(202)
+                ->response();
+        } catch (SystemDefaultException $exception) {
+            return $exception->response();
+        }
+    }
+
+
 }

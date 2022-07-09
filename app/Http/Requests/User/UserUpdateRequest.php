@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Users;
+namespace App\Http\Requests\User;
 
 use App\Http\Requests\Request;
 
@@ -22,7 +22,7 @@ class UserUpdateRequest extends Request
     public function rules(): array
     {
         return [
-            'name' => 'string',
+            'phone' => 'required|integer|celular_com_ddd',
             'password' => 'string'
         ];
     }

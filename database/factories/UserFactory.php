@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Support\Enums\UserRoleEnum;
 use Faker\Generator;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
@@ -26,9 +25,9 @@ class UserFactory extends Factory
         $faker = $this->withFaker();
         return [
             'name' => $faker->name(),
-            'email' => $faker->safeEmail(),
+            'email' => $faker->freeEmail(),
             'email_verified_at' => now(),
-            'password' => Hash::make('123456'),
+            'password' => '123456',
             'remember_token' => Str::random(10),
             'cpf' => $faker->cpf(),
             'rg' => $faker->rg(),

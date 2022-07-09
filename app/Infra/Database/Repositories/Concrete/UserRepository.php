@@ -9,22 +9,22 @@ use App\Models\User;
 
 class UserRepository extends RepositoryBase implements IUserRepository
 {
-    public function save(User $user): User
-    {
-        try {
-            $user->save();
-            return $user;
-        } catch (SystemDefaultException $exception) {
-            $this->returnError($exception);
-        }
-    }
-
     public function update(User $user): User
     {
         try {
             $user->save();
             $user->refresh();
             $this->db->commit();
+            return $user;
+        } catch (SystemDefaultException $exception) {
+            $this->returnError($exception);
+        }
+    }
+
+    public function save(User $user): User
+    {
+        try {
+            $user->save();
             return $user;
         } catch (SystemDefaultException $exception) {
             $this->returnError($exception);

@@ -22,6 +22,8 @@ Route::middleware(['jwt'])->group(function () {
         Route::post('/', [UserController::class, 'store'])->name('users.store')->withoutMiddleware('jwt')->where('userUuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
         Route::get('confirm-email/{userUuid}', [UserController::class, 'verifyEmail'])->name('user.finish_registration')->withoutMiddleware('jwt');
         Route::put('/', [UserController::class, 'update'])->name('users.update');
+        Route::post('/request/password-reset', [UserController::class, 'resetPasswordRequest'])->name('users.request_password_reset')->withoutMiddleware('jwt');
+        Route::post('/password-reset', [UserController::class, 'resetPassword'])->name('users.update_password_reset')->withoutMiddleware('jwt');
     });
 
     Route::prefix('auth')->group(function () {

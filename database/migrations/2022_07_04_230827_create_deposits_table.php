@@ -18,6 +18,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Account::class)->constrained();
             $table->decimal('amount', 18, 2);
+            $table->date('valid_until');
             $table->timestamps();
         });
     }
