@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use YourAppRocks\EloquentUuid\Traits\HasUuid;
 
 /**
  * @property int $id
@@ -18,10 +19,11 @@ use Illuminate\Support\Carbon;
  */
 class Deposit extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuid;
 
     protected $fillable = [
         'account_id',
+        'uuid',
         'amount',
         'valid_until',
     ];

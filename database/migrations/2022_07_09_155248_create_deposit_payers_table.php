@@ -1,12 +1,12 @@
 <?php
 
 use App\Models\Account;
+use App\Models\Deposit;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -14,12 +14,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('deposits', function (Blueprint $table) {
+        Schema::create('deposit_payers', function (Blueprint $table) {
             $table->id();
             $table->uuid();
+            $table->foreignIdFor(Deposit::class)->constrained();
             $table->foreignIdFor(Account::class)->constrained();
-            $table->decimal('amount', 18, 2);
-            $table->date('valid_until');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('deposits');
+        Schema::dropIfExists('deposit_payers');
     }
 };

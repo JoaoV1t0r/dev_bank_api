@@ -4,7 +4,10 @@ namespace App\Http\Requests\Deposit;
 
 use App\Http\Requests\Request;
 
-class DepositRequest extends Request
+/**
+ * @property float $amount
+ */
+class DepositStoreRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
