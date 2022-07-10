@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\DepositController;
 use App\Http\Controllers\Api\RegistrationRequestController;
 use App\Http\Controllers\Api\TransferController;
 use App\Http\Controllers\Api\UserController;
@@ -20,6 +21,11 @@ Route::middleware(['jwt'])->group(function () {
 
     Route::prefix('transfer')->group(function () {
         Route::post('/', [TransferController::class, 'postTransfer']);
+    });
+
+    Route::prefix('deposit')->group(function () {
+        Route::post('/', [DepositController::class, 'postStoreDeposit']);
+        Route::post('/pay', [DepositController::class, 'postPayDeposit']);
     });
 
     Route::prefix('users')->group(function () {
