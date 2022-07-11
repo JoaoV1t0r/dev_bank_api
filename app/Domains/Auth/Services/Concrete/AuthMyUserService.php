@@ -33,6 +33,6 @@ class AuthMyUserService implements IAuthMyUserService
         $this->myUser->setEmailVerifiedAt(auth()->user()->email_verified_at);
         $this->myUser->setCreatedAt(auth()->user()->created_at);
         $this->myUser->setUpdatedAt(auth()->user()->updated_at);
-
+        $this->myUser->setAccount(auth()->user()->account);
     }
 }

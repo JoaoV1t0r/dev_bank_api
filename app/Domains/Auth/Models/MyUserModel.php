@@ -15,11 +15,28 @@ class MyUserModel extends Model
     protected string $emailVerifiedAt;
     protected string $createdAt;
     protected string $updatedAt;
+    protected mixed $account;
 
 
     public static function builder(): static
     {
         return new MyUserModel();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccount(): string
+    {
+        return $this->account;
+    }
+
+    /**
+     * @param string $uuid
+     */
+    public function setAccount(mixed $account): void
+    {
+        $this->account = $account;
     }
 
     /**

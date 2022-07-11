@@ -2,15 +2,16 @@
 
 namespace App\Domains\Deposit\Services\Concrete;
 
-use App\Domains\Deposit\Services\Abstract\IDepositPayService;
-use App\Exceptions\BusinessRuleViolationException;
-use App\Http\Requests\Deposit\DepositPayRequest;
 use App\Models\Account;
 use App\Models\Deposit;
 use App\Models\DepositPayer;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
+use App\Http\Requests\Deposit\DepositPayRequest;
+use App\Exceptions\BusinessRuleViolationException;
+use App\Domains\Deposit\Services\Abstract\IDepositPayService;
 
 class DepositPayService implements IDepositPayService
 {
@@ -28,6 +29,8 @@ class DepositPayService implements IDepositPayService
         $this->setDeposit();
         $this->setAccountPayer();
         $this->checkBalancePayer();
+        $this->checkAccountPassword();
+        $this->checkDepositIsPaid();
         return $this->payDeposit();
     }
 
@@ -56,20 +59,30 @@ class DepositPayService implements IDepositPayService
         }
     }
 
+    public function checkAccountPassword()
+    {
+        if (!Hash::check($this->request->accountPassword, $this->accountPayer->password)) {
+            throw new BusinessRuleViolationException('Invalid account password');
+        }
+    }
+
+    public function checkDepositIsPaid()
+    {
+        if (DB::table('deposit_payers')->where('deposit_id', $this->deposit->id)->get()->count()) {
+            throw new BusinessRuleViolationException('Deposit already paid');
+        }
+    }
+
     private function payDeposit(): DepositPayer
     {
-        DB::beginTransaction();
         $depositPayer = new DepositPayer();
         $depositPayer->deposit_id = $this->deposit->id;
         $depositPayer->account_id = $this->accountPayer->id;
         $this->accountPayer->balance -= $this->deposit->amount;
         $this->deposit->account->balance += $this->deposit->amount;
-        if (
-            $depositPayer->save()
-            or $this->accountPayer->save()
-            or $this->deposit->account->save()
-        )
-            DB::commit();
+        $depositPayer->save();
+        $this->accountPayer->update();
+        $this->deposit->account->update();
         return $depositPayer;
     }
 }
