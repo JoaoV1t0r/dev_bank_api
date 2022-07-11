@@ -29,8 +29,7 @@ class UsersStoreService implements IUsersStoreService
         RegistrationRequest            $registrationRequest,
         IUserRepository                $userRepository,
         User                           $newUser,
-    )
-    {
+    ) {
         $this->registrationRequestRepository = $registrationRequestRepository;
         $this->registrationRequest = $registrationRequest;
         $this->userRepository = $userRepository;
@@ -66,9 +65,9 @@ class UsersStoreService implements IUsersStoreService
     private function mapRegistrationRequest(): void
     {
         $this->registrationRequest->user_id = $this->newUser->id;
-        $this->registrationRequest->rg_photo = $this->request->rgPhoto->store('public/rg_photos');
-        $this->registrationRequest->cpf_photo = $this->request->cpfPhoto->store('public/cpf_photos');
-        $this->registrationRequest->confirm_address_photo = $this->request->confirmAddressPhoto->store('public/confirm_address_photos');
+        $this->registrationRequest->rg_photo = $this->request->hasFile('rgPhoto') ? $this->request->rgPhoto->store('public/rg_photos') : '';
+        $this->registrationRequest->cpf_photo = $this->request->hasFile('cpfPhoto') ? $this->request->cpfPhoto->store('public/cpf_photos') : '';
+        $this->registrationRequest->confirm_address_photo = $this->request->hasFile('confirmAddressPhoto') ? $this->request->confirmAddressPhoto->store('public/confirm_address_photos') : '';
     }
 
     private function saveNewUser()

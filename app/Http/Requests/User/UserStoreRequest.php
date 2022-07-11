@@ -44,9 +44,9 @@ class UserStoreRequest extends Request
             'phone' => 'required|min:10|celular_com_ddd',
             'cpf' => 'required|min:11|cpf',
             'rg' => 'required|min:10',
-            'rgPhoto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'cpfPhoto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'confirmAddressPhoto' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'rgPhoto' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'cpfPhoto' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'confirmAddressPhoto' => 'image|mimes:jpeg,png,jpg|max:2048',
 
         ];
     }

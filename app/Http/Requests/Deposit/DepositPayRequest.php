@@ -30,9 +30,8 @@ class DepositPayRequest extends Request
     public function rules(): array
     {
         return [
-            'accountPassword' => 'required|string|min:6',
+            'accountPassword' => 'required|string|min:4',
             'depositUuid' => 'required|string'
         ];
     }
 }
-

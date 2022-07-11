@@ -24,6 +24,7 @@ abstract class DependencyInjection
             new RegistrationRequestDi($app),
             new AccountDi($app),
             new TransferDi($app),
+            new DepositDi($app),
         ]);
     }
 
